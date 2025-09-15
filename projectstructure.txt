@@ -1,0 +1,30 @@
+fastapi-cloud-deployment-guide/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.py
+│   └── routes/
+│       ├── __init__.py
+│       ├── items.py
+│       └── users.py
+├── cloud-config/
+│   ├── aws/
+│   │   ├── apprunner.yaml
+│   │   └── buildspec.yml
+│   ├── google-cloud/
+│   │   └── cloudbuild.yaml
+│   ├── azure/
+│   │   └── azure-pipelines.yml
+│   └── heroku/
+│       └── heroku.yml
+├── scripts/
+│   ├── deploy-aws.sh
+│   ├── deploy-gcloud.sh
+│   ├── deploy-azure.sh
+│   └── deploy-heroku.sh
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .dockerignore
+├── .gitignore
+└── README.md
