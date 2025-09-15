@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    environment:
+      - DEBUG=True
+      - CLOUD_PROVIDER=local
+      - PORT=80
+    restart: unless-stopped
+
+  # Example with PostgreSQL database
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=mydatabase
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
