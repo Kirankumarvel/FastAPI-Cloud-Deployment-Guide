@@ -1,0 +1,11 @@
+build:
+  docker:
+    web: Dockerfile
+run:
+  web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:$PORT app.main:app
+setup:
+  addons:
+    - plan: heroku-postgresql:hobby-dev
+config:
+  DEBUG: False
+  CLOUD_PROVIDER: heroku
