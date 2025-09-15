@@ -1,0 +1,26 @@
+# Docker ignore file
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+.git/
+.gitignore
+README.md
+Dockerfile
+docker-compose.yml
+.dockerignore
+.idea/
+.vscode/
+*.log
+logs/
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+cloud-config/
+scripts/
