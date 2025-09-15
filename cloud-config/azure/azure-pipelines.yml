@@ -1,0 +1,58 @@
+trigger:
+  - main
+
+resources:
+  - repo: self
+
+variables:
+  dockerRegistryServiceConnection: 'azure-container-registry-connection'
+  imageRepository: 'fastapi-app'
+  containerRegistry: '$(ACR_REGISTRY)'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+  azureSubscription: 'azure-subscription-connection'
+  appName: 'fastapi-app'
+  environment: 'production'
+
+stages:
+  - stage: Build
+    displayName: Build and push stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: Docker@2
+            displayName: Build and push an image to container registry
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+                latest
+              arguments: '--build-arg ENVIRONMENT=$(environment)'
+
+  - stage: Deploy
+    displayName: Deploy stage
+    dependsOn: Build
+    jobs:
+      - job: Deploy
+        displayName: Deploy
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: AzureCLI@2
+            displayName: Deploy to Azure Container Apps
+            inputs:
+              azureSubscription: $(azureSubscription)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az containerapp update \
+                  --name $(appName) \
+                  --resource-group $(resourceGroup) \
+                  --image $(containerRegistry).azurecr.io/$(imageRepository):$(tag) \
+                  --set-env-vars CLOUD_PROVIDER=azure
