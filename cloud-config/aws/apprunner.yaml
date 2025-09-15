@@ -1,0 +1,18 @@
+version: 1.0
+runtime: python3
+build:
+  commands:
+    pre-build:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt
+  post-build:
+    - echo "Build completed successfully"
+run:
+  command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 app.main:app
+  network:
+    port: 8000
+  environment:
+    - name: DEBUG
+      value: "False"
+    - name: CLOUD_PROVIDER
+      value: "aws"
